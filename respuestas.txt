@@ -1,3 +1,13 @@
 2.f ¿Puede ver el archivo tp2_1_2.c?¿Por qué?
 No se puede ver el archivo debido a que fue un cambio que se realizó
 en otra branch (Opcion_2).
+
+Vuelva a ejecutar el comando gitk --all ¿Qué diferencias nota?
+Se puede ver el commit realizado antes, donde se agregó el archivo
+respuestas.txt efectuado dentro de la branch main, y una nueva rama
+que se desprende de la principal (Opcion_2).
+
+Luego utilice el comando gitk –all para ver los cambios, ¿Qué nota?
+En este caso se observa un gráfico más complejo, de la branch principal
+sale una rama (Opcion_2) que luego se vuelve a unir a la principal,
+consecuencia del merge, agregando el archivo tp_1_2.c.
