@@ -1,0 +1,3 @@
+2.f ¿Puede ver el archivo tp2_1_2.c?¿Por qué?
+No se puede ver el archivo debido a que fue un cambio que se realizó
+en otra branch (Opcion_2).
