@@ -1,138 +1,70 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <string.h>
-#define CANT_PC 5 // Se podría cambiar para preguntar al usuario cuántas PCs desea agregar, y hace un arreglo de PCs en tiempo de ejecución
-#define MAX 20    // Cantidad de letras máximas para el tipo de cpu en el arreglo tipos[][].
 
-typedef struct
+struct compu
 {
     int velocidad;  // entre 1 y 3 GHz
-    int anio;       // entre 2015 y 2024
+    int anio;       // entre 2015 y 2023
     int cantidad;   // entre 1 y 8
     char *tipo_cpu; // valores del arreglo tipos
-} COMPU;
+};
 
-/* void cargaDeDatos(COMPU *PC); */
-void listaPC(COMPU *PC);
-void viejaPC(COMPU *PC);
-void rapidaPC(COMPU *PC);
+/* c.- Escribe una función que presente la lista de las PC,
+cada una con sus características. */
+void listaPC(struct compu *PC);
+
+/* d.- Escribe una función que presente la PC más vieja. */
+void viejaPC(struct compu *PC);
+
+/* e.- Escribe una función que presente la PC que tiene mayor velocidad. */
+void rapidaPC(struct compu *PC);
 
 int main()
 {
-    // Semilla aleatorio
+    // Semilla aleatoria
     srand(time(NULL));
 
-    // Arreglo de 5 computadoras
-    COMPU *PC = (COMPU *)malloc(CANT_PC * sizeof(COMPU)); // O se podría directamente usar COMPU PC[CANT_PC].
+    char tipos[6][10] =
+        {"Intel",
+         "AMD",
+         "Celeron",
+         "Athlon",
+         "Core",
+         "Pentium"};
 
-    // Carga de datos por parte del usuario
-    // cargaDeDatos(PC);
+    /* b.- Defina una variable de tipo arreglo de estructuras
+    para guardar las características de 5 PC que cargará el usuario*/
+    struct compu PC[5];
 
-    // Para evitar la carga manual de datos, los inicializo de forma automática y aleatoria
-    char tipos[][MAX] = {
-        "Intel",
-        "AMD",
-        "Celeron",
-        "Athlon",
-        "Core",
-        "Pentium"};
-
-    int eleccionTipo;
-
-    for (int i = 0; i < CANT_PC; i++)
+    // Evito la carga manual de datos
+    int numAle;
+    for (int i = 0; i < 5; i++)
     {
-        // rand() % (max - min + 1) + min;
-        PC[i].velocidad = rand() % (3 - 1 + 1) + 1;
-        PC[i].anio = rand() % (2024 - 2015 + 1) + 2015;
-        PC[i].cantidad = rand() % (8 - 1 + 1) + 1;
-        PC[i].tipo_cpu = tipos[rand() % (5 - 0 + 1) + 0];
+        PC[i].velocidad = 1 + rand() % 3; // 1 - 3
+        PC[i].anio = 2015 + rand() % 10;  // 2015 - 2024
+        PC[i].cantidad = 1 + rand() % 8;  // 1 - 8
+        numAle = rand() % 6;              // 0 - 5, son 6 elementos en el arreglo tipos[6][10];
+        PC[i].tipo_cpu = tipos[numAle];
     }
 
-    // Lista de PCs
+    // Muestro la lista de PCs
     listaPC(PC);
 
-    // PC más vieja
+    // Muestro la PC más vieja
     viejaPC(PC);
 
-    // PC más rápida
+    // Muestro la PC más rápida
     rapidaPC(PC);
-
-    // Liberando memoria asiganda dinámicamente
-    /* for (int i = 0; i < CANT_PC; i++)
-    {
-        free(PC[i].tipo_cpu);
-    } */
-
-    free(PC); // No es necesario si se usa COMPU PC[CANT_PC].
 
     return 0;
 }
 
-/* void cargaDeDatos(COMPU *PC)
+void listaPC(struct compu *PC)
 {
-    for (int i = 0; i < CANT_PC; i++)
+    for (int i = 0; i < 5; i++)
     {
-        printf("\nPC %d:", i + 1);
-        do
-        {
-            printf("\nIngrese la velocidad (1 - 3 GHz): ");
-            scanf("%d", &PC[i].velocidad);
-        } while (PC[i].velocidad < 1 || PC[i].velocidad > 3);
-
-        do
-        {
-            printf("\nIngrese el anio de fabricacion (2015 - 2024): ");
-            scanf("%d", &PC[i].anio);
-        } while (PC[i].anio < 2015 || PC[i].anio > 2024);
-
-        do
-        {
-            printf("\nIngrese la cantidad de nucleos (1 - 8): ");
-            scanf("%d", &PC[i].cantidad);
-        } while (PC[i].cantidad < 1 || PC[i].cantidad > 8);
-
-        char tipos[][MAX] = {
-            "Intel",
-            "AMD",
-            "Celeron",
-            "Athlon",
-            "Core",
-            "Pentium"};
-
-        int cantidadTipos = sizeof(tipos) / sizeof(tipos[0]); // sizeof(tipos) / sizeof(tipos[0]) nos permite saber cuantos elementos hay dentro del arreglo tipo[], por lo que si en un futuro se agregan más tipos de procesadores, el programa seguiría imprimiéndolos a todos.
-
-        printf("\nIngrese el tipo de procesador ( ");
-        for (int i = 0; i < cantidadTipos; i++)
-        {
-            printf("%d. %s ", i + 1, tipos[i]);
-        }
-        printf("): ");
-
-        int eleccionTipo = 0;
-
-        do
-        {
-            scanf("%d", &eleccionTipo);
-
-            if (eleccionTipo <= 0 || eleccionTipo > cantidadTipos)
-            {
-                printf("\nTipo de cpu incorrecto, ingrese nuevamente: ");
-            }
-
-        } while (eleccionTipo <= 0 || eleccionTipo > cantidadTipos);
-
-        PC[i].tipo_cpu = (char *)malloc(8 * sizeof(char)); // 7 por ser la cantidad de letras que contiene la palabra más larga dentro del arreglo tipos[], y 8 para el caracter nulo '\0'.
-
-        strcpy(PC[i].tipo_cpu, tipos[eleccionTipo - 1]);
-    }
-} */
-
-void listaPC(COMPU *PC)
-{
-    for (int i = 0; i < CANT_PC; i++)
-    {
-        printf("\n\n______________PC N.%d______________", i + 1);
+        printf("\n\n______________PC N.%d______________", i);
         printf("\n\tVelocidad: %d", PC[i].velocidad);
         printf("\n\tAnio: %d", PC[i].anio);
         printf("\n\tCantidad de nucleos: %d", PC[i].cantidad);
@@ -140,11 +72,11 @@ void listaPC(COMPU *PC)
     }
 }
 
-void viejaPC(COMPU *PC)
+void viejaPC(struct compu *PC)
 {
     int masAntiguo = PC[0].anio, index = 0;
 
-    for (int i = 0; i < CANT_PC; i++)
+    for (int i = 0; i < 5; i++)
     {
         if (masAntiguo > PC[i].anio)
         {
@@ -154,14 +86,14 @@ void viejaPC(COMPU *PC)
     }
 
     printf("\n\n___________PC mas vieja___________");
-    printf("\n\tPC N.%d creada en %d", index + 1, masAntiguo);
+    printf("\n\tPC N.%d creada en %d", index, masAntiguo);
 }
 
-void rapidaPC(COMPU *PC)
+void rapidaPC(struct compu *PC)
 {
     int masRapida = PC[0].velocidad, index = 0;
 
-    for (int i = 0; i < CANT_PC; i++)
+    for (int i = 0; i < 5; i++)
     {
         if (masRapida < PC[i].velocidad)
         {
@@ -171,5 +103,5 @@ void rapidaPC(COMPU *PC)
     }
 
     printf("\n\n__________PC mas rapida__________");
-    printf("\n\tPC N.%d con %d GHz", index + 1, masRapida);
+    printf("\n\tPC N.%d con %d GHz", index, masRapida);
 }
